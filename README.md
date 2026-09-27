@@ -11,6 +11,8 @@ travel`. There is no live search, maps, or booking integration — hours,
 prices, and opening times are the model's best-effort estimate and can be
 outdated or wrong.
 
+**Live demo:** https://trip-planner-sooty-mu.vercel.app/
+
 ## Architecture
 
 - **Backend** — FastAPI (Python). One Claude API call per city generates a
