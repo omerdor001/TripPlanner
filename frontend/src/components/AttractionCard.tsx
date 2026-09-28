@@ -21,7 +21,7 @@ export default function AttractionCard({ attraction, lang }: { attraction: Attra
       </div>
       <p className="attraction-description">{attraction.description}</p>
       <div className="attraction-meta">
-        <span>⏱ ~{attraction.estimated_duration_minutes} min</span>
+        <span>⏱ {t.minutes(attraction.estimated_duration_minutes)}</span>
         <span>💶 {formatCost(attraction, t.costUnknown)}</span>
         {attraction.neighborhood && <span>📍 {attraction.neighborhood}</span>}
       </div>

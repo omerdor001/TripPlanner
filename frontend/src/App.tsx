@@ -11,6 +11,7 @@ function App() {
   const [lang, setLang] = useState<Lang>("en");
   const [status, setStatus] = useState<Status>("idle");
   const [tripPlan, setTripPlan] = useState<TripPlan | null>(null);
+  const [planKey, setPlanKey] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [lastRequest, setLastRequest] = useState<TripPlanRequest | null>(null);
 
@@ -23,6 +24,7 @@ function App() {
     try {
       const plan = await createTripPlan(request);
       setTripPlan(plan);
+      setPlanKey((k) => k + 1);
       setStatus("success");
     } catch (err) {
       const message = err instanceof TripPlanApiError ? err.message : t.genericError;
@@ -50,7 +52,7 @@ function App() {
           className={`lang-btn ${lang === "he" ? "lang-btn-active" : ""}`}
           onClick={() => setLang("he")}
         >
-          עברית
+          עבר
         </button>
       </div>
 
@@ -105,7 +107,7 @@ function App() {
                   <p>{t.updatingTitle}</p>
                 </div>
               )}
-              <ItineraryView tripPlan={tripPlan} lang={tripPlan.language} />
+              <ItineraryView key={planKey} tripPlan={tripPlan} lang={tripPlan.language} />
             </div>
           )}
         </section>

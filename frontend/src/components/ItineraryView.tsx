@@ -16,9 +16,12 @@ export default function ItineraryView({ tripPlan, lang }: { tripPlan: TripPlan; 
   const t = translations[lang];
   const byCity = useMemo(() => groupByCity(tripPlan.day_plans), [tripPlan]);
   const cities = useMemo(() => Array.from(byCity.keys()), [byCity]);
-  const [activeCity, setActiveCity] = useState(cities[0]);
+  const [selectedCity, setActiveCity] = useState(cities[0]);
   const [activeDay, setActiveDay] = useState(1);
 
+  // A new plan can use different city names (e.g. "Vienna" -> "וינה"), so the
+  // remembered selection may no longer exist — fall back to the first city.
+  const activeCity = byCity.has(selectedCity) ? selectedCity : cities[0];
   const currentCityDays = byCity.get(activeCity) ?? [];
   const currentDay = currentCityDays.find((d) => d.day_number === activeDay) ?? currentCityDays[0];
 
@@ -31,7 +34,7 @@ export default function ItineraryView({ tripPlan, lang }: { tripPlan: TripPlan; 
     <div className="itinerary-view" dir={dirOf(lang)} lang={lang}>
       <div className="itinerary-header">
         <h2>
-          {tripPlan.cities.join(" → ")} · {tripPlan.total_days} {t.dayPlural}
+          {t.tripTitle(tripPlan.total_days, tripPlan.cities)}
         </h2>
         <button className="export-btn" onClick={() => window.print()}>
           {t.exportPdf}

@@ -36,6 +36,8 @@ interface Translation {
   hours: string;
   costUnknown: string;
   dayTab: (n: number) => string;
+  minutes: (n: number) => string;
+  tripTitle: (days: number, cities: string[]) => string;
   genericError: string;
   interestOptions: Record<string, string>;
   budgetOptions: Record<string, string>;
@@ -73,6 +75,8 @@ export const translations: Record<Lang, Translation> = {
     hours: "Hours",
     costUnknown: "cost unknown",
     dayTab: (n) => `Day ${n}`,
+    minutes: (n) => `~${n} min`,
+    tripTitle: (days, cities) => `${days} ${days === 1 ? "day" : "days"} in ${cities.join(" → ")}`,
     genericError: "Something went wrong. Please try again.",
     interestOptions: {
       art: "Art", food: "Food", history: "History",
@@ -114,6 +118,13 @@ export const translations: Record<Lang, Translation> = {
     hours: "שעות פתיחה",
     costUnknown: "העלות לא ידועה",
     dayTab: (n) => `יום ${n}`,
+    minutes: (n) => `${n} דקות`,
+    tripTitle: (days, cities) => {
+      const duration = days === 1 ? "יום אחד" : `${days} ימים`;
+      // Hebrew prefix "ב" attaches directly to Hebrew names, but takes a hyphen before Latin ones.
+      const prefix = /^[֐-׿]/.test(cities[0]) ? "ב" : "ב-";
+      return `${duration} ${prefix}${cities.join(" → ")}`;
+    },
     genericError: "משהו השתבש. נסו שוב.",
     interestOptions: {
       art: "אמנות", food: "אוכל", history: "היסטוריה",
