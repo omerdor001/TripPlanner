@@ -11,7 +11,7 @@ travel`. There is no live search, maps, or booking integration — hours,
 prices, and opening times are the model's best-effort estimate and can be
 outdated or wrong.
 
-**Live demo:** https://trip-planner-sooty-mu.vercel.app/
+**Live demo:** [https://trip-planner-sooty-mu.vercel.app/](https://trip-planner-sooty-mu.vercel.app/)
 
 ## Architecture
 
