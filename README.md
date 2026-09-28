@@ -7,9 +7,11 @@ day-by-day plan with practical tips.
 
 **All attraction data is LLM-generated and unverified.** Every attraction and
 the overall trip plan is labeled `unverified — confirm hours/prices before
-travel`. There is no live search, maps, or booking integration — hours,
-prices, and opening times are the model's best-effort estimate and can be
-outdated or wrong.
+travel`. Hours, prices, and opening times are the model's best-effort
+estimate and can be outdated or wrong. Each attraction also carries an
+LLM-provided street address and an "Open in Google Maps" link built from it
+(a plain search link — no Maps API key needed); verify the pin before you rely
+on it.
 
 **Live demo:** [https://trip-planner-sooty-mu.vercel.app/](https://trip-planner-sooty-mu.vercel.app/)
 
@@ -96,6 +98,26 @@ Add `?format=markdown` to get a rendered Markdown itinerary back instead of
 JSON. Multiple cities are supported — each is planned with its own Claude API
 call and appended to the trip.
 
+Each attraction in the response includes `address` (as written locally, Latin
+script) and `maps_url`, a Google Maps search link for the place. The Markdown
+output includes both as well.
+
+### Caching
+
+The Claude call is slow, so the per-city attraction list is cached (memory +
+JSON files on disk). The key is the normalized city name, number of days,
+interests (order/case-insensitive), budget level, language, model, and a hash
+of the prompt + schema — so editing the prompt or switching model never serves
+stale results. Day grouping is cheap and is recomputed on every request.
+
+- `?refresh=true` bypasses the cache and regenerates (the result replaces the
+  cached entry).
+- Env vars (all optional): `CACHE_ENABLED` (default `true`),
+  `CACHE_TTL_SECONDS` (default 7 days), `CACHE_DIR` (default `backend/.cache`,
+  or the system temp dir on Vercel, where it only lasts as long as the warm
+  instance).
+- Concurrent identical requests share a single model call.
+
 Malformed model output is retried once automatically; if it still doesn't
 validate against the schema, the endpoint returns `502` with a description of
 the failure. Claude API errors (rate limits, billing, etc.) also return `502`
@@ -108,8 +130,9 @@ generated 3-day Vienna itinerary (art + food interests, mid-range budget).
 
 ## Notes / scope
 
-- No external APIs (search, maps, weather, booking) are integrated — day
-  grouping is done by the LLM reasoning over neighborhood names, not real
-  geo-distance.
+- No external APIs (search, weather, booking) are integrated, and Google Maps
+  is only linked to, not called — day grouping is done by the LLM reasoning
+  over neighborhood names, not real geo-distance.
 - No CLI — this is a web app only.
-- Data is not cached or persisted; each request calls the Claude API fresh.
+- Only the LLM results are cached (see Caching); trip plans themselves are not
+  stored.

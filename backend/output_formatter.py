@@ -10,6 +10,8 @@ _LABELS: dict[Language, dict[str, str]] = {
         "notes": "Notes",
         "general_tips": "General tips",
         "neighborhood": "Neighborhood",
+        "address": "Address",
+        "open_in_maps": "Open in Google Maps",
         "best_time_to_visit": "Best time to visit",
         "opening_hours": "Opening hours",
         "booking_recommended": "Booking recommended in advance",
@@ -24,6 +26,8 @@ _LABELS: dict[Language, dict[str, str]] = {
         "notes": "הערות",
         "general_tips": "טיפים כלליים",
         "neighborhood": "שכונה",
+        "address": "כתובת",
+        "open_in_maps": "פתיחה ב-Google Maps",
         "best_time_to_visit": "זמן מומלץ לביקור",
         "opening_hours": "שעות פתיחה",
         "booking_recommended": "מומלץ להזמין מקום מראש",
@@ -47,6 +51,9 @@ def _format_attraction(attraction: Attraction, labels: dict[str, str]) -> str:
     ]
     if attraction.neighborhood:
         lines.append(f"  - {labels['neighborhood']}: {attraction.neighborhood}")
+    if attraction.address:
+        lines.append(f"  - {labels['address']}: {attraction.address}")
+    lines.append(f"  - [{labels['open_in_maps']}]({attraction.maps_url})")
     if attraction.best_time_to_visit:
         lines.append(f"  - {labels['best_time_to_visit']}: {attraction.best_time_to_visit}")
     if attraction.opening_hours:

@@ -35,6 +35,7 @@ interface Translation {
   bestTime: string;
   hours: string;
   costUnknown: string;
+  openInMaps: string;
   dayTab: (n: number) => string;
   minutes: (n: number) => string;
   tripTitle: (days: number, cities: string[]) => string;
@@ -74,6 +75,7 @@ export const translations: Record<Lang, Translation> = {
     bestTime: "Best time",
     hours: "Hours",
     costUnknown: "cost unknown",
+    openInMaps: "Open in Google Maps",
     dayTab: (n) => `Day ${n}`,
     minutes: (n) => `~${n} min`,
     tripTitle: (days, cities) => `${days} ${days === 1 ? "day" : "days"} in ${cities.join(" → ")}`,
@@ -117,6 +119,7 @@ export const translations: Record<Lang, Translation> = {
     bestTime: "זמן מומלץ",
     hours: "שעות פתיחה",
     costUnknown: "העלות לא ידועה",
+    openInMaps: "פתיחה ב-Google Maps",
     dayTab: (n) => `יום ${n}`,
     minutes: (n) => `${n} דקות`,
     tripTitle: (days, cities) => {

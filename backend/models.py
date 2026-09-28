@@ -1,6 +1,7 @@
 from typing import List, Literal, Optional
+from urllib.parse import quote_plus
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, computed_field
 
 Category = Literal[
     "art", "history", "food", "nightlife", "nature", "shopping", "other"
@@ -14,6 +15,14 @@ class Attraction(BaseModel):
     description: str
     category: Category
     neighborhood: Optional[str] = None
+    address: Optional[str] = Field(
+        default=None,
+        description=(
+            "Full street address of the place as written locally, in Latin "
+            "script regardless of response language, including postal code, "
+            "city and country, e.g. 'Heldenplatz, 1010 Vienna, Austria'."
+        ),
+    )
     estimated_duration_minutes: int
     approximate_cost_eur: Optional[float] = None
     cost_notes: Optional[str] = None
@@ -21,6 +30,18 @@ class Attraction(BaseModel):
     opening_hours: Optional[str] = None
     booking_recommended: bool = False
     unverified: bool = True
+
+    # Serialization-only: excluded from the LLM's JSON schema, included in API output.
+    @computed_field
+    @property
+    def maps_url(self) -> str:
+        """Google Maps search link built from the place name and its address."""
+        place = self.name
+        if self.address:
+            place = f"{self.name}, {self.address}"
+        elif self.neighborhood:
+            place = f"{self.name}, {self.neighborhood}"
+        return f"https://www.google.com/maps/search/?api=1&query={quote_plus(place)}"
 
 
 class DayPlan(BaseModel):

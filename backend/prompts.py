@@ -20,6 +20,13 @@ material to build a day-by-day itinerary without repeats.
 - Assign each attraction a "neighborhood" (the area/district it's in) so \
 attractions can later be grouped by proximity — pick real, specific \
 neighborhood names for the city, not generic labels.
+- Give every attraction an "address": its full street address as written \
+locally, in Latin script, including postal code, city and country (e.g. \
+"Heldenplatz, 1010 Vienna, Austria"). It is used to build a Google Maps \
+link, so make it as precise as you can — for a place without a street \
+address (a park, a market), give the closest street or entrance. Never \
+invent an address; if you are unsure of the exact street, give the \
+best-known one.
 - Tailor selection to the stated interests and budget level. If interests \
 are empty, cover a broad, well-rounded mix (major landmarks, food, culture).
 - All factual details (hours, prices) are best-effort and may be outdated — \
@@ -44,7 +51,8 @@ LANGUAGE_INSTRUCTIONS: dict[Language, str] = {
         'transliteration. The "category" field is the one exception: it '
         "must stay exactly one of the fixed English enum values (art, "
         "history, food, nightlife, nature, shopping, other) — do not "
-        "translate it.\n"
+        "translate it. The \"address\" field is the other exception: keep "
+        "it in local Latin script so it can be found on Google Maps.\n"
     ),
 }
 

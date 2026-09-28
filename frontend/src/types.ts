@@ -12,6 +12,8 @@ export interface Attraction {
   description: string;
   category: Category;
   neighborhood: string | null;
+  address: string | null;
+  maps_url: string;
   estimated_duration_minutes: number;
   approximate_cost_eur: number | null;
   cost_notes: string | null;

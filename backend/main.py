@@ -29,7 +29,11 @@ def health() -> dict:
 
 
 @app.post("/api/trip-plan")
-def create_trip_plan(request: TripPlanRequest, format: str = Query("json", pattern="^(json|markdown)$")):
+def create_trip_plan(
+    request: TripPlanRequest,
+    format: str = Query("json", pattern="^(json|markdown)$"),
+    refresh: bool = Query(False, description="Bypass the cache and regenerate from the model."),
+):
     if not request.cities:
         raise HTTPException(status_code=400, detail="At least one city is required.")
 
@@ -44,6 +48,7 @@ def create_trip_plan(request: TripPlanRequest, format: str = Query("json", patte
                 interests=request.interests,
                 budget_level=request.budget_level,
                 language=request.language,
+                refresh=refresh,
             )
         except AttractionGenerationError as error:
             raise HTTPException(status_code=502, detail=str(error)) from error

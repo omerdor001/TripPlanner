@@ -25,6 +25,22 @@ export default function AttractionCard({ attraction, lang }: { attraction: Attra
         <span>💶 {formatCost(attraction, t.costUnknown)}</span>
         {attraction.neighborhood && <span>📍 {attraction.neighborhood}</span>}
       </div>
+      <div className="attraction-location">
+        {attraction.address && (
+          // Addresses are Latin script even in Hebrew mode; keep them LTR inside the RTL layout.
+          <span className="attraction-address" dir="ltr">
+            {attraction.address}
+          </span>
+        )}
+        <a
+          className="maps-link"
+          href={attraction.maps_url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          🗺 {t.openInMaps}
+        </a>
+      </div>
       {(attraction.best_time_to_visit || attraction.opening_hours || attraction.booking_recommended) && (
         <div className="attraction-tips">
           {attraction.best_time_to_visit && (
